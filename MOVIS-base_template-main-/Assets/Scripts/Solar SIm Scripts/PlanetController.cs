@@ -31,10 +31,8 @@ public class PlanetController : MonoBehaviour
         Velocity = InitialVelocity;
         mesh.transform.localScale = Vector3.one * diameter; //Could move to editmode script if needed
         transform.localPosition = InitialPosition;
-        Debug.Log(ID + " - " + InitialPosition);
         MathPosition = transform.localPosition * privateOrbitScale;
         transform.eulerAngles = new Vector3(0, 0, tiltAngle);
-        Debug.Log(ID + " - " + MathPosition);
     }
 
     private void Start()
@@ -52,9 +50,9 @@ public class PlanetController : MonoBehaviour
         if (!isPined)
         {
             MathPosition = controller.points.First.Value;
-            Debug.Log(ID);
-            Debug.Log(MathPosition);
-            Debug.Log(GetComponentInParent<UniverseController>().cameraLockedPlanet.controller.points.First.Value);
+            //Debug.Log(ID);
+            //Debug.Log(MathPosition);
+            //Debug.Log(GetComponentInParent<UniverseController>().cameraLockedPlanet.controller.points.First.Value);
             transform.localPosition = (MathPosition * UniverseController.orbitScale * privateOrbitScale) - GetComponentInParent<UniverseController>().cameraLockedPlanet.controller.points.First.Value;
         }
         else

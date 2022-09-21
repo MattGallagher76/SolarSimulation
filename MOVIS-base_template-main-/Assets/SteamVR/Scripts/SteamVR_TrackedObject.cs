@@ -115,6 +115,7 @@ namespace Valve.VR
 
         //DO NOT FIX THIS UNLESS YOU ARE REPLACING THE TRACKERS!!!!
         public string Tracker1ID = "LHR-6E6212A4";
+        public string Tracker2ID = "LHR-EE4ED1D2";
         public string Tracker6ID = "LHR-A36C3E16";
         public string Tracker8ID = "LHR-4780977C";
         public string Tracker9ID = "LHR-4F225E25";
@@ -165,6 +166,14 @@ namespace Valve.VR
                 if (SerialNumber == Tracker9ID)
                 {
                     if (this.gameObject.name.Contains("9"))
+                    {
+                        SetDeviceIndex(i);
+                        break;
+                    }
+                }
+                if (SerialNumber == Tracker2ID)
+                {
+                    if (this.gameObject.name.Contains("2"))
                     {
                         SetDeviceIndex(i);
                         break;

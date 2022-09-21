@@ -8,11 +8,11 @@ public class PlanetData : MonoBehaviour
     public Planet[] PlanetList;
 
     public static int changeDuration = 100;
-    public static int ViewTypeCount = 2;
+    public static int ViewTypeCount = 2;//If adding a viewtype, change this value AND the one in VRController
 
     void Start()
     {
-        PlanetList = new Planet[9];
+        PlanetList = new Planet[10];
         ReadCSV();
     }
 

@@ -8,37 +8,24 @@ public class UniverseController : MonoBehaviour
     public static float bigG = 6.67428f * Mathf.Pow(10, -11);
     public static float planetScale = 1;
     public static float orbitScale = 1;
-    public static float width = 0.05f;
+    //public static float width = 0.05f;
 
     public static float displayedPlanetYMultiplier = 1;
 
-    public static int steps = 1000; //Temp Val
-    public static int editModeSteps = 1000; //Edit Mode Steps
+    public static int steps = 100; //Temp Val
     public static float timeStep = 0.001f; //The frequency which the planets position is calculated
-    public static float editModeTimeStep = 0.001f;
     public static int orbitSpeedK = 10; //The rate at which planets step through the points list
     public static int displayK = 30; //The rate at which line renderers step through the points list
 
     public static bool orbiting = true;
-    public static int ViewType = 1;
+    public static int ViewType = 0;
     public static int changeSteps = 0;
 
     private PlanetController[] Planets;
     private VirtualController[] Bodies;
 
-    private int count = 0;
-
     public PlanetController cameraLockedPlanet;
-
-    private void OnApplicationQuit()
-    {
-        planetScale = 1;
-        orbitScale = 1;
-        foreach(PlanetController pc in FindObjectsOfType<PlanetController>())
-        {
-            pc.UpdateScale();
-        }
-    }
+    //private static bool hasStateChanged = false;
 
     private void Awake()
     {
@@ -66,37 +53,34 @@ public class UniverseController : MonoBehaviour
 
     void Update()
     {
-        if(orbiting)
+        if(!LobbyManager.userType)
         {
-            foreach (PlanetController pc in Planets)
+            if(orbiting)
             {
-                pc.updateLocation();
+                foreach (PlanetController pc in Planets)
+                {
+                    pc.updateLocation();
+                }
+                updateVirtualControllers();
+                if (changeSteps != 0)
+                {
+                    changeSteps = 0;
+                }
             }
-            updateVirtualControllers();
-            count += orbitSpeedK;
-            if (count >= displayK)
+            else //Changing viewtypes
             {
-                count = count - displayK;
+                foreach (PlanetController pc in Planets)
+                {
+                    pc.diameter = pc.ViewTypeChangeMatrix[0][changeSteps];
+                    pc.privateOrbitScale = pc.ViewTypeChangeMatrix[1][changeSteps];
+                    pc.UpdateChangeValues();
+                }
+                if (changeSteps == PlanetData.changeDuration - 1)
+                {
+                    orbiting = true;
+                }
+                changeSteps++;
             }
-            if(changeSteps != 0)
-            {
-                changeSteps = 0;
-                VRController.refreshSceneChange();
-            }
-        }
-        else //Changing viewtypes
-        {
-            foreach (PlanetController pc in Planets)
-            {
-                pc.diameter = pc.ViewTypeChangeMatrix[0][changeSteps];
-                pc.privateOrbitScale = pc.ViewTypeChangeMatrix[1][changeSteps];
-                pc.UpdateChangeValues();
-            }
-            if (changeSteps == PlanetData.changeDuration - 1)
-            {
-                orbiting = true;
-            }
-            changeSteps++;
         }
     }
 
