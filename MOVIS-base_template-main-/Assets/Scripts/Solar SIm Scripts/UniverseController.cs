@@ -4,29 +4,26 @@ using UnityEngine;
 
 public class UniverseController : MonoBehaviour
 {
+    public static float bigG = 6.67428f * Mathf.Pow(10, -11); //G used for gravitation force calculating
+    public static float planetScale = 1; //The scale planets are displayed
+    public static float orbitScale = 1; //The scale of all orbits - can be used to scale the entire system at once rather than each individually
 
-    public static float bigG = 6.67428f * Mathf.Pow(10, -11);
-    public static float planetScale = 1;
-    public static float orbitScale = 1;
-    //public static float width = 0.05f;
-
-    public static float displayedPlanetYMultiplier = 1;
-
-    public static int steps = 100; //Temp Val
+    public static int steps = 100; //How many steps the orbit of planets is calculated ahead of time. Affects the maximum speed.
     public static float timeStep = 0.001f; //The frequency which the planets position is calculated
     public static int orbitSpeedK = 10; //The rate at which planets step through the points list
     public static int displayK = 30; //The rate at which line renderers step through the points list
 
-    public static bool orbiting = true;
-    public static int ViewType = 0;
-    public static int changeSteps = 0;
+    public static bool orbiting = true; //Used to determine if planets are orbiting or changing view type
+    public static int changeSteps = 0; //Used while changing view types
 
-    private PlanetController[] Planets;
-    private VirtualController[] Bodies;
+    private PlanetController[] Planets; //List of planets to reference
+    private VirtualController[] Bodies; //List of the virtual controlles in the planets to reference on build
 
-    public PlanetController cameraLockedPlanet;
-    //private static bool hasStateChanged = false;
+    public PlanetController cameraLockedPlanet; //Which ever planet is currently locked to the camera view. This should replace a pined planet. WIP
 
+    /*
+     * Sets up all planets and virtual controllers
+     */
     private void Awake()
     {
         Planets = FindObjectsOfType<PlanetController>();
@@ -43,6 +40,9 @@ public class UniverseController : MonoBehaviour
         }
     }
 
+    /*
+     * Shows all arrows, can be removed eventually (I think)
+     */
     private void Start()
     {
         foreach(PlanetIdentifier pi in FindObjectsOfType<PlanetIdentifier>())
@@ -51,6 +51,9 @@ public class UniverseController : MonoBehaviour
         }
     }
 
+    /*
+     * The Update method that handles moving the planets or changing viewtypes
+     */
     void Update()
     {
         if(!LobbyManager.userType)
@@ -84,7 +87,10 @@ public class UniverseController : MonoBehaviour
         }
     }
 
-    public void InitiateVirtualControllers() //To use only if each point's list needs to be completely remade. A change in orbit speed or scale does not need a new points list
+    /*
+     * To use only if each point's list needs to be completely remade. A change in orbit speed or scale does not need a new points list
+     */
+    public void InitiateVirtualControllers()
     {
         foreach (VirtualController vc in Bodies) //If used while points lists are full, clears them
         {
@@ -115,7 +121,10 @@ public class UniverseController : MonoBehaviour
         }
     }
 
-    public void updateVirtualControllers() //Used to find the next orbitSpeedK spaces in points
+    /*
+     * Used to find the next orbitSpeedK spaces in points
+     */
+    public void updateVirtualControllers()
     {
         foreach(VirtualController vc in Bodies) //Removes the index that planets should currently be at
         {
@@ -137,15 +146,6 @@ public class UniverseController : MonoBehaviour
                 Bodies[j].position = newPos;
                 Bodies[j].points.AddLast(newPos);
             }
-        }
-    }
-
-    void editModeArrows()
-    {
-        foreach (PlanetIdentifier pi in FindObjectsOfType<PlanetIdentifier>())
-        {
-            pi.updateVisability();
-            pi.initArrow();
         }
     }
 }

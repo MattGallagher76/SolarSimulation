@@ -2,25 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * The class that handles reading the CSV data sheet and setting up the ability to change view types
+ */
 public class PlanetData : MonoBehaviour
 {
-    public TextAsset planetSheet;
-    public Planet[] PlanetList;
+    public TextAsset planetSheet; //The CSV file
+    public Planet[] PlanetList; //The list of subclass planets used to store the data
 
-    public static int changeDuration = 100;
-    public static int ViewTypeCount = 2;//If adding a viewtype, change this value AND the one in VRController
+    public static int changeDuration = 100; //The value related to how long it takes for the planets to change views
+    public static int ViewTypeCount = 2; //If adding a viewtype, change this value AND the one in VRController
 
+    //Start method
     void Start()
     {
         PlanetList = new Planet[10];
         ReadCSV();
     }
 
-    private void Update()
-    {
-
-    }
-
+    /*
+     * Reads the CSV file and stores the information into the subclass planets
+     */
     void ReadCSV()
     {
         int planetID = 0;
@@ -45,6 +47,9 @@ public class PlanetData : MonoBehaviour
         }
     }
 
+    /*
+     * Used to seperate the information into the data files
+     */
     void ParseRow(int i, string[] data, float[] output)
     {
         for (int x = 0; x < ViewTypeCount; x++)
@@ -53,16 +58,25 @@ public class PlanetData : MonoBehaviour
         }
     }
 
-
+    /*
+     * This is a subclass used to store the information of a planet from the CSV file
+     */
     public class Planet
     { //Index in Array is the Viewtype
-        public float[] Mass;
-        public float[] InitVelocityZ;
-        public float[] Diameter;
-        public float[] XPos;
-        public float[] YPos;
-        public float[] OrbitScale;
+        public float[] Mass; //The possible masses
+        public float[] InitVelocityZ; //The possible velocity
+        public float[] Diameter; //The possible diameter
+        public float[] XPos; //The possible x position
+        public float[] YPos; //The possible y position
+        public float[] OrbitScale; //The possible scale of the orbit
+        /*
+         * Note: Mass, InitVelocity, Xpos, and YPos should not change when view types change.
+         * Orbit scale and diameter are able and should change
+         */
 
+        /*
+         * The constructor that takes in the data
+         */
         public Planet()
         {
             Mass = new float[ViewTypeCount];

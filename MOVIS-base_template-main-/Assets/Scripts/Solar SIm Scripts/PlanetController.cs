@@ -19,8 +19,6 @@ public class PlanetController : MonoBehaviour
     public Vector3 Velocity { get; set; }
     public VirtualController controller { get; set; }
     public float[][] ViewTypeChangeMatrix { get; set; }
-
-    //private LinkedList<Vector3> trajectoryList;
     /*
      * MathPos should be used for any velocity, position, or acceleration calculations and is not affected by scale
      * Rigidbody's position values should change due to scale and are not used in any calulations. 
@@ -35,24 +33,11 @@ public class PlanetController : MonoBehaviour
         transform.eulerAngles = new Vector3(0, 0, tiltAngle);
     }
 
-    private void Start()
-    {
-        
-    }
-
-    private void Update()
-    {
-
-    }
-
     public void updateLocation()
     {
         if (!isPined)
         {
             MathPosition = controller.points.First.Value;
-            //Debug.Log(ID);
-            //Debug.Log(MathPosition);
-            //Debug.Log(GetComponentInParent<UniverseController>().cameraLockedPlanet.controller.points.First.Value);
             transform.localPosition = (MathPosition * UniverseController.orbitScale * privateOrbitScale) - GetComponentInParent<UniverseController>().cameraLockedPlanet.controller.points.First.Value;
         }
         else
