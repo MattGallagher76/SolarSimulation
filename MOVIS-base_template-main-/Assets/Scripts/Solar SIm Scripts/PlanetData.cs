@@ -10,7 +10,7 @@ public class PlanetData : MonoBehaviour
     public TextAsset planetSheet; //The CSV file
     public Planet[] PlanetList; //The list of subclass planets used to store the data
 
-    public static int changeDuration = 100; //The value related to how long it takes for the planets to change views
+    //public static int changeDuration = 1000; //The value related to how long it takes for the planets to change views
     public static int ViewTypeCount = 2; //If adding a viewtype, change this value AND the one in VRController
 
     //Start method

@@ -51,20 +51,22 @@ public class PlanetController : MonoBehaviour
     {
         mesh.transform.localScale = Vector3.one * diameter * UniverseController.planetScale;
     }
-
+    
     public void changeViewType(int ViewType)
     {
         PlanetData pd = GetComponentInParent<PlanetData>();
         float[][] changeMatrix = new float[2][];
-        for (int i = 0; i < changeMatrix.Length; i++)
+        for (int i = 0; i < changeMatrix.Length; i++) //Sets up the changematrices
         {
-            changeMatrix[i] = new float[PlanetData.changeDuration];
+            changeMatrix[i] = new float[UniverseController.changeDuration];
         }
-        for(int i = 0; i < PlanetData.changeDuration; i ++)
+        for (int i = 0; i < UniverseController.changeDuration; i++)
         {
-            changeMatrix[0][i] = (i) * (pd.PlanetList[ID].Diameter[ViewType - 1] - diameter) / (PlanetData.changeDuration - 1) + diameter;
-            changeMatrix[1][i] = (i) * (pd.PlanetList[ID].OrbitScale[ViewType - 1] - privateOrbitScale) / (PlanetData.changeDuration - 1) + privateOrbitScale;
+            changeMatrix[0][i] = UniverseController.sigmoid(i) * (pd.PlanetList[ID].Diameter[ViewType - 1] - diameter) + diameter;
+            changeMatrix[1][i] = UniverseController.sigmoid(i) * (pd.PlanetList[ID].OrbitScale[ViewType - 1] - privateOrbitScale) + privateOrbitScale;
         }
+        changeMatrix[0][UniverseController.changeDuration - 1] = pd.PlanetList[ID].Diameter[ViewType - 1];
+        changeMatrix[1][UniverseController.changeDuration - 1] = pd.PlanetList[ID].OrbitScale[ViewType - 1];
         ViewTypeChangeMatrix = changeMatrix;
     }
 

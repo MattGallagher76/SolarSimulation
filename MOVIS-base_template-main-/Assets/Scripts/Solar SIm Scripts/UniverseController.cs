@@ -19,8 +19,15 @@ public class UniverseController : MonoBehaviour
     private PlanetController[] Planets; //List of planets to reference
     private VirtualController[] Bodies; //List of the virtual controlles in the planets to reference on build
 
+    public static float SigmoidK = 14;
+    public static float SigmoidOffset;
+    public static float SigmoidOffsetDelta = 0.1f;
+    public static float tolerance = 0.001f;
+    public static int changeDuration = 1000;
+
     public PlanetController cameraLockedPlanet; //Which ever planet is currently locked to the camera view. This should replace a pined planet. WIP
 
+    private int k = 0;
     /*
      * Sets up all planets and virtual controllers
      */
@@ -45,10 +52,19 @@ public class UniverseController : MonoBehaviour
      */
     private void Start()
     {
-        foreach(PlanetIdentifier pi in FindObjectsOfType<PlanetIdentifier>())
+        while(sigmoid(0) > tolerance)
+        {
+            SigmoidOffset += SigmoidOffsetDelta;
+        }
+        foreach (PlanetIdentifier pi in FindObjectsOfType<PlanetIdentifier>())
         {
             pi.updateVisability();
         }
+    }
+
+    public static float sigmoid(float x)
+    {
+        return 1 / (1 + Mathf.Pow((float)System.Math.E, -1 * SigmoidK * (x/changeDuration - SigmoidOffset)));
     }
 
     /*
@@ -56,6 +72,11 @@ public class UniverseController : MonoBehaviour
      */
     void Update()
     {
+        k++;
+        if(k == 1000)
+        {
+            FindObjectOfType<ViewTypeObserver>().changeView(2);
+        }
         if(!LobbyManager.userType)
         {
             if(orbiting)
@@ -78,7 +99,7 @@ public class UniverseController : MonoBehaviour
                     pc.privateOrbitScale = pc.ViewTypeChangeMatrix[1][changeSteps];
                     pc.UpdateChangeValues();
                 }
-                if (changeSteps == PlanetData.changeDuration - 1)
+                if (changeSteps == changeDuration - 1)
                 {
                     orbiting = true;
                 }
