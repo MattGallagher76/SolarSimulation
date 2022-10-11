@@ -33,7 +33,7 @@ namespace Valve.VR
         private Vector3 speed = Vector3.zero;
 
         public bool isChanging = false;  //Boolean to represent if the user is trying to change viewtypes.
-        private int ViewTypeCount = 2;//If adding a viewtype, change this value AND the one in PlanetData
+        private int ViewTypeCount = 3;//If adding a viewtype, change this value AND the one in PlanetData
         private GameObject[] menuItems; //An array of the menu objects created while in use.
 
         //Start method
