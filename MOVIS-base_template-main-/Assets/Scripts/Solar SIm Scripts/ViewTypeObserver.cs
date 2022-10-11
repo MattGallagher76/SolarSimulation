@@ -32,7 +32,7 @@ public class ViewTypeObserver : MonoBehaviour
         if (scene == 3)
         {
             FindObjectOfType<UniverseController>().cameraLockedPlanet = earth;
-            FindObjectOfType<UniverseController>().gameObject.transform.position = new Vector3(0, 34.29f, 0);
+            FindObjectOfType<UniverseController>().gameObject.transform.position = new Vector3(0, -34.29f, 0);
         }
         UniverseController.orbiting = false; //Stops the planets from orbiting and tells UniverseController to change the planets data for the given scene.
         foreach (PlanetController pc in FindObjectsOfType<PlanetController>())
