@@ -15,6 +15,13 @@ public class UniverseController : MonoBehaviour
 
     public static bool orbiting = true; //Used to determine if planets are orbiting or changing view type
     public static int changeSteps = 0; //Used while changing view types
+    public static int changeState = 0; //0 = Slowing down (default), 1 = changing orbit, 2 = speeding up, 3/0 = return to orbiting
+    public static int currentSpeed = 0; //Current orbitSpeedK when changing
+
+    private static TrailRenderer tr; //used to pause the trailrenderer when changing viewtypes
+    public static float[] originalTime; //Will be used to store each planets time for trail renderer
+    public static bool changed = false; //Not sure if actually needed but is here for now
+    public static int count; //Created because of the way the for loops are done for now
 
     private PlanetController[] Planets; //List of planets to reference
     private VirtualController[] Bodies; //List of the virtual controlles in the planets to reference on build
@@ -27,7 +34,6 @@ public class UniverseController : MonoBehaviour
 
     public PlanetController cameraLockedPlanet; //Which ever planet is currently locked to the camera view. This should replace a pined planet. WIP
 
-    private int k = 0;
     /*
      * Sets up all planets and virtual controllers
      */
@@ -45,6 +51,7 @@ public class UniverseController : MonoBehaviour
             Planets[i].controller = Bodies[i];
             Planets[i].mesh.transform.localPosition = Vector3.zero;
         }
+        originalTime = new float[Planets.Length];
     }
 
     /*
@@ -60,6 +67,7 @@ public class UniverseController : MonoBehaviour
         {
             pi.updateVisability();
         }
+        //FindObjectOfType<ViewTypeObserver>().changeView(2);
     }
 
     public static float sigmoid(float x)
@@ -72,40 +80,100 @@ public class UniverseController : MonoBehaviour
      */
     void Update()
     {
-        k++;
-        if(k == 1000)
-        {
-            FindObjectOfType<ViewTypeObserver>().changeView(2);
-        }
+        
         if(!LobbyManager.userType)
         {
             if(orbiting)
             {
-                foreach (PlanetController pc in Planets)
-                {
-                    pc.updateLocation();
-                }
-                updateVirtualControllers();
-                if (changeSteps != 0)
-                {
-                    changeSteps = 0;
-                }
+                updateTrails();
+                move();
+                currentSpeed = orbitSpeedK;
             }
             else //Changing viewtypes
             {
-                foreach (PlanetController pc in Planets)
+                hideTrails();
+                //Debug.Log(changeState + " " + changeSteps + " " + orbitSpeedK);
+                if(changeState == 0) //Slowing down
                 {
-                    pc.diameter = pc.ViewTypeChangeMatrix[0][changeSteps];
-                    pc.privateOrbitScale = pc.ViewTypeChangeMatrix[1][changeSteps];
-                    pc.UpdateChangeValues();
+                    orbitSpeedK = Mathf.RoundToInt(currentSpeed * (1f - ((float)changeSteps)/500f));
+                    move();
+                    if(changeSteps == 500)
+                    {
+                        changeSteps = 0;
+                        changeState = 1;
+                    }
+                    changeSteps++;
                 }
-                if (changeSteps == changeDuration - 1)
+                if(changeState == 1) //Changing
                 {
-                    orbiting = true;
+                    foreach (PlanetController pc in Planets)
+                    {
+                        pc.diameter = pc.ViewTypeChangeMatrix[0][changeSteps];
+                        pc.privateOrbitScale = pc.ViewTypeChangeMatrix[1][changeSteps];
+                        pc.UpdateChangeValues();
+                    }
+                    if (changeSteps == changeDuration - 1)
+                    {
+                        changeState = 2;
+                        changeSteps = 0;
+                    }
+                    changeSteps++;
                 }
-                changeSteps++;
+                if(changeState == 2) //Speeding up
+                {
+                    orbitSpeedK = Mathf.RoundToInt(currentSpeed * ((float)changeSteps) / 500f);
+                    move();
+                    if (changeSteps == 500)
+                    {
+                        changeSteps = 0;
+                        changeState = 0;
+                        orbiting = true;
+                    }
+                    changeSteps++;
+                }
             }
         }
+    }
+
+    public void move()
+    {
+        foreach (PlanetController pc in Planets)
+        {
+            pc.updateLocation();
+        }
+        updateVirtualControllers();
+    }
+
+    public void updateTrails()
+    {
+        Debug.Log("UpdateTrails");
+        count = 0;
+        foreach (PlanetController pc in Planets)
+        {
+            if (changed)
+            {
+                tr = pc.GetComponent<TrailRenderer>();
+                tr.time = originalTime[count];
+            }
+        }
+        changed = false;
+    }
+
+    public void hideTrails()
+    {
+        Debug.Log("HideTrails");
+        count = 0;
+        foreach (PlanetController pc in Planets)
+        {
+            tr = pc.GetComponent<TrailRenderer>();
+            if (tr.time != 0) //If the planet's time has not already been captured and changed to 0 previously
+            {
+                originalTime[count] = tr.time;
+            }
+
+            tr.time = 0;
+        }
+        changed = true;
     }
 
     /*

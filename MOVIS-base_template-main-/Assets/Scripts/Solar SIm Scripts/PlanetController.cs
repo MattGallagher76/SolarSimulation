@@ -35,6 +35,9 @@ public class PlanetController : MonoBehaviour
 
     public void updateLocation()
     {
+        MathPosition = controller.points.First.Value;
+        transform.localPosition = (MathPosition - GetComponentInParent<UniverseController>().cameraLockedPlanet.controller.points.First.Value) * UniverseController.orbitScale * privateOrbitScale;
+        /*
         if (!isPined)
         {
             MathPosition = controller.points.First.Value;
@@ -44,7 +47,8 @@ public class PlanetController : MonoBehaviour
         {
             //transform.localPosition = GetComponentInParent<UniverseController>().cameraLockedPlanet.InitialPosition;
         }
-        transform.eulerAngles += new Vector3(0, rotationSpeed / UniverseController.orbitSpeedK, 0);
+        //transform.eulerAngles += new Vector3(0, rotationSpeed / UniverseController.orbitSpeedK, 0);
+        */
     }
 
     public void UpdateScale()

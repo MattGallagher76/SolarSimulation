@@ -27,7 +27,7 @@ public class PlanetData : MonoBehaviour
     {
         int planetID = 0;
         string[] data = planetSheet.text.Split(new string[] { ",", "\n" }, System.StringSplitOptions.None);
-        for (int i = 7; i < data.Length - (ViewTypeCount * 2);)
+        for (int i = 9; i < data.Length - (ViewTypeCount * 2);)
         {
             Planet planet = new Planet();
             ParseRow(i, data, planet.Mass);
@@ -54,6 +54,7 @@ public class PlanetData : MonoBehaviour
     {
         for (int x = 0; x < ViewTypeCount; x++)
         {
+            Debug.Log(data[i + x]);
             output[x] = float.Parse(data[i + x]);
         }
     }

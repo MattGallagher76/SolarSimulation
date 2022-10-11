@@ -8,6 +8,7 @@ using UnityEngine;
 public class ViewTypeObserver : MonoBehaviour
 {
     public int currentViewType = 0; //The current viewtype that the scene is displaying
+    public PlanetController earth;
 
     /*
      * Changes the viewtype of all devices.
@@ -25,8 +26,12 @@ public class ViewTypeObserver : MonoBehaviour
         {
             foreach (PlanetIdentifier pi in FindObjectsOfType<PlanetIdentifier>())
             {
-                pi.hideArrow();
+                //pi.hideArrow();
             }
+        }
+        if (scene == 3)
+        {
+            FindObjectOfType<UniverseController>().cameraLockedPlanet = earth;
         }
         UniverseController.orbiting = false; //Stops the planets from orbiting and tells UniverseController to change the planets data for the given scene.
         foreach (PlanetController pc in FindObjectsOfType<PlanetController>())
