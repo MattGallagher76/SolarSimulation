@@ -89,6 +89,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewFinderCameras: []
+  cameraOffset: {x: 0.70710677, y: 0, z: 0, w: 0.70710677}
 --- !u!114 &6747746944674162525
 MonoBehaviour:
   m_ObjectHideFlags: 0

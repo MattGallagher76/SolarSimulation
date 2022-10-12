@@ -12,6 +12,8 @@ public class CameraSetup : MonoBehaviour
     private PhotonView photonView;
     [SerializeField]
     private GameObject[] viewFinderCameras;
+
+    public Quaternion cameraOffset;
     void Start()
     {
         canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
@@ -56,8 +58,16 @@ public class CameraSetup : MonoBehaviour
     {
         try
         {
-            transform.position = tracker.transform.position;
-            transform.rotation = tracker.transform.rotation;
+            Vector3 newPosition = tracker.transform.position;
+            Quaternion newRotation = tracker.transform.rotation;
+
+            newPosition.y += .1f;
+            newRotation *= cameraOffset;
+
+            transform.position = newPosition;
+            transform.rotation = newRotation;
+            //transform.position = tracker.transform.position;
+            //transform.rotation = tracker.transform.rotation;
         }
         catch
         {
