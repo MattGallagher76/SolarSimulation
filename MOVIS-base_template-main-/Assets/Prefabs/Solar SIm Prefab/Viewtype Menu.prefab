@@ -106,9 +106,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3272905869131176475}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e13e55448b07d0b4ea3b535d7d50d821, type: 3}
+  m_Script: {fileID: 11500000, guid: 8100c70126be6d141950df258a5c2571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ViewTypeID: 0
+  controller: {fileID: 0}
 --- !u!54 &641078876997627746
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -60,7 +60,7 @@ namespace Valve.VR
                 isChanging = true;
                 for(int i = 0; i < ViewTypeCount; i ++)
                 {
-                    GameObject view = Instantiate(ViewTypeMenuPrefab, LeftHandPos.transform.position + LeftHandPos.transform.rotation * (new Vector3((i * 0.2f) - (ViewTypeCount * 0.1f / 2), 0.1f, 0)), transform.rotation);
+                    GameObject view = Instantiate(ViewTypeMenuPrefab, LeftHandPos.transform.position + LeftHandPos.transform.rotation * (new Vector3(i*0.2f - 0.2f, 0.1f, 0)), transform.rotation);
                     view.GetComponent<SteamVRViewTypeMenu>().ViewTypeID = i + 1;
                     view.GetComponent<SteamVRViewTypeMenu>().controller = this;
                     menuItems[i] = view;
@@ -71,7 +71,7 @@ namespace Valve.VR
                 isChanging = true;
                 for (int i = 0; i < ViewTypeCount; i++)
                 {
-                    GameObject view = Instantiate(ViewTypeMenuPrefab, RightHandPos.transform.position + RightHandPos.transform.rotation * (new Vector3((i * 0.2f) - (ViewTypeCount * 0.1f / 2), 0.1f, 0)), transform.rotation);
+                    GameObject view = Instantiate(ViewTypeMenuPrefab, RightHandPos.transform.position + RightHandPos.transform.rotation * (new Vector3(i * 0.2f - 0.2f, 0.1f, 0)), transform.rotation);
                     view.GetComponent<SteamVRViewTypeMenu>().ViewTypeID = i + 1;
                     view.GetComponent<SteamVRViewTypeMenu>().controller = this;
                     menuItems[i] = view;

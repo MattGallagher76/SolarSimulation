@@ -54,7 +54,6 @@ public class PlanetData : MonoBehaviour
     {
         for (int x = 0; x < ViewTypeCount; x++)
         {
-            Debug.Log(data[i + x]);
             output[x] = float.Parse(data[i + x]);
         }
     }

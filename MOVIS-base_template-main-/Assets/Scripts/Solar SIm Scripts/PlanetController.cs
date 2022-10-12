@@ -47,13 +47,21 @@ public class PlanetController : MonoBehaviour
         {
             //transform.localPosition = GetComponentInParent<UniverseController>().cameraLockedPlanet.InitialPosition;
         }
-        //transform.eulerAngles += new Vector3(0, rotationSpeed / UniverseController.orbitSpeedK, 0);
         */
+        //transform.eulerAngles += new Vector3(0, rotationSpeed / UniverseController.orbitSpeedK, 0);
     }
 
     public void UpdateScale()
     {
-        mesh.transform.localScale = Vector3.one * diameter * UniverseController.planetScale;
+        if (ID == 3)
+        {
+            Debug.Log("Diameter: " + diameter);
+            mesh.transform.localScale = Vector3.one * diameter * UniverseController.planetScale * 0.5f;
+        }
+        else
+        {
+            mesh.transform.localScale = Vector3.one * diameter * UniverseController.planetScale;
+        }
     }
     
     public void changeViewType(int ViewType)
@@ -76,8 +84,16 @@ public class PlanetController : MonoBehaviour
 
     public void UpdateChangeValues()
     {
-        mesh.transform.localScale = Vector3.one * diameter * UniverseController.planetScale;
-        if(!isPined)
+        if (ID == 3)
+        {
+            Debug.Log("Diameter: " + diameter);
+            mesh.transform.localScale = Vector3.one * diameter * UniverseController.planetScale * 0.5f;
+        }
+        else
+        {
+            mesh.transform.localScale = Vector3.one * diameter * UniverseController.planetScale;
+        }
+        if (!isPined)
             transform.localPosition = (MathPosition * UniverseController.orbitScale * privateOrbitScale);
     }
 }

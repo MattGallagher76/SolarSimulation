@@ -9,6 +9,7 @@ public class ViewTypeObserver : MonoBehaviour
 {
     public int currentViewType = 0; //The current viewtype that the scene is displaying
     public PlanetController earth;
+    public Light atmosphereLight;
 
     /*
      * Changes the viewtype of all devices.
@@ -22,17 +23,16 @@ public class ViewTypeObserver : MonoBehaviour
                 pi.showArrow();
             }
         }
-        else
-        {
-            foreach (PlanetIdentifier pi in FindObjectsOfType<PlanetIdentifier>())
-            {
-                //pi.hideArrow();
-            }
-        }
         if (scene == 3)
         {
-            FindObjectOfType<UniverseController>().cameraLockedPlanet = earth;
+            atmosphereLight.intensity = 1.8f;
+            FindObjectOfType<UniverseController>().cameraLockedPlanet = earth; //Eventually, I would like to make this transition look nice.
             FindObjectOfType<UniverseController>().gameObject.transform.position = new Vector3(0, -34.29f, 0);
+        }
+        else
+        {
+            atmosphereLight.intensity = 0f;
+            FindObjectOfType<UniverseController>().gameObject.transform.position = new Vector3(0, 0, 0);
         }
         UniverseController.orbiting = false; //Stops the planets from orbiting and tells UniverseController to change the planets data for the given scene.
         foreach (PlanetController pc in FindObjectsOfType<PlanetController>())

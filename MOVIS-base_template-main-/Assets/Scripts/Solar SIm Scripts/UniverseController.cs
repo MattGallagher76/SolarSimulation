@@ -30,7 +30,7 @@ public class UniverseController : MonoBehaviour
     public static float SigmoidOffset;
     public static float SigmoidOffsetDelta = 0.1f;
     public static float tolerance = 0.001f;
-    public static int changeDuration = 1000;
+    public static int changeDuration = 500;
 
     public PlanetController cameraLockedPlanet; //Which ever planet is currently locked to the camera view. This should replace a pined planet. WIP
 
@@ -93,16 +93,9 @@ public class UniverseController : MonoBehaviour
             {
                 hideTrails();
                 //Debug.Log(changeState + " " + changeSteps + " " + orbitSpeedK);
-                if(changeState == 0) //Slowing down
+                if (changeState == 0) //Slowing down
                 {
-                    orbitSpeedK = Mathf.RoundToInt(currentSpeed * (1f - ((float)changeSteps)/500f));
-                    move();
-                    if(changeSteps == 500)
-                    {
-                        changeSteps = 0;
-                        changeState = 1;
-                    }
-                    changeSteps++;
+                    decreaseSpeed(200f, FindObjectOfType<ViewTypeObserver>().currentViewType == 3 ? 3 : 0); ;
                 }
                 if(changeState == 1) //Changing
                 {
@@ -121,18 +114,40 @@ public class UniverseController : MonoBehaviour
                 }
                 if(changeState == 2) //Speeding up
                 {
-                    orbitSpeedK = Mathf.RoundToInt(currentSpeed * ((float)changeSteps) / 500f);
-                    move();
-                    if (changeSteps == 500)
+                    foreach (PlanetIdentifier pi in FindObjectsOfType<PlanetIdentifier>()) //Temp
                     {
-                        changeSteps = 0;
-                        changeState = 0;
-                        orbiting = true;
+                        pi.hideArrow();
                     }
-                    changeSteps++;
+                    increaseSpeed(200f, currentSpeed);
                 }
             }
         }
+    }
+
+    public void decreaseSpeed(float time, int min)
+    {
+        //orbitSpeedK = Mathf.RoundToInt(currentSpeed * (1f - ((float)changeSteps) / time));
+        orbitSpeedK = Mathf.RoundToInt(((min - currentSpeed) / time * changeSteps) + currentSpeed);
+        move();
+        if (changeSteps == (int)time)
+        {
+            changeSteps = 0;
+            changeState = 1;
+        }
+        changeSteps++;
+    }
+
+    public void increaseSpeed(float time, int max)
+    {
+        orbitSpeedK = Mathf.RoundToInt(max * ((float)changeSteps) / time);
+        move();
+        if (changeSteps == (int)time)
+        {
+            changeSteps = 0;
+            changeState = 0;
+            orbiting = true;
+        }
+        changeSteps++;
     }
 
     public void move()
@@ -146,7 +161,7 @@ public class UniverseController : MonoBehaviour
 
     public void updateTrails()
     {
-        Debug.Log("UpdateTrails");
+        //Debug.Log("UpdateTrails");
         count = 0;
         foreach (PlanetController pc in Planets)
         {
@@ -161,7 +176,7 @@ public class UniverseController : MonoBehaviour
 
     public void hideTrails()
     {
-        Debug.Log("HideTrails");
+        //Debug.Log("HideTrails");
         count = 0;
         foreach (PlanetController pc in Planets)
         {
