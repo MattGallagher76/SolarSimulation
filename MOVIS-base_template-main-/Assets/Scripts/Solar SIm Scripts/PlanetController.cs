@@ -30,24 +30,13 @@ public class PlanetController : MonoBehaviour
         mesh.transform.localScale = Vector3.one * diameter; //Could move to editmode script if needed
         transform.localPosition = InitialPosition;
         MathPosition = transform.localPosition * privateOrbitScale;
-        transform.eulerAngles = new Vector3(0, 0, tiltAngle);
+        mesh.transform.eulerAngles = new Vector3(0, 0, tiltAngle);
     }
 
     public void updateLocation()
     {
         MathPosition = controller.points.First.Value;
         transform.localPosition = (MathPosition - GetComponentInParent<UniverseController>().cameraLockedPlanet.controller.points.First.Value) * UniverseController.orbitScale * privateOrbitScale;
-        /*
-        if (!isPined)
-        {
-            MathPosition = controller.points.First.Value;
-            transform.localPosition = (MathPosition * UniverseController.orbitScale * privateOrbitScale) - GetComponentInParent<UniverseController>().cameraLockedPlanet.controller.points.First.Value;
-        }
-        else
-        {
-            //transform.localPosition = GetComponentInParent<UniverseController>().cameraLockedPlanet.InitialPosition;
-        }
-        */
         //transform.eulerAngles += new Vector3(0, rotationSpeed / UniverseController.orbitSpeedK, 0);
     }
 
@@ -86,7 +75,6 @@ public class PlanetController : MonoBehaviour
     {
         if (ID == 3)
         {
-            Debug.Log("Diameter: " + diameter);
             mesh.transform.localScale = Vector3.one * diameter * UniverseController.planetScale * 0.5f;
         }
         else

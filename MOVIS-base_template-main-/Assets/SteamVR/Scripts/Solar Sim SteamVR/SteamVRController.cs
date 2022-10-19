@@ -16,10 +16,10 @@ namespace Valve.VR
         public float sensitivity; //How sensitive the trigger is for moving - DEVELOPER USE ONLY
         public float maxSpeed; //How fast the movement is - DEVELOPER USE ONLY
 
-        public SteamVR_Action_Boolean LeftChangeViewType = null; //The action to change viewtypes on the left controller
-        public SteamVR_Action_Boolean RightChangeViewType = null; //The action to change viewtypes on the right controller
-        public SteamVR_Action_Single RightTrigger = null; //The action related to pulling the trigger. Currently used for movement - DEVELOPER USE ONLY
-        public SteamVR_Action_Single LeftTrigger = null; //The action related to pulling the trigger. Currently used for movement - DEVELOPER USE ONLY
+        public SteamVR_Action_Boolean LeftButton; //The action to change viewtypes on the left controller
+        public SteamVR_Action_Boolean RightButton; //The action to change viewtypes on the right controller
+        public SteamVR_Action_Single RightTrigger; //The action related to pulling the trigger. Currently used for movement - DEVELOPER USE ONLY
+        public SteamVR_Action_Single LeftTrigger; //The action related to pulling the trigger. Currently used for movement - DEVELOPER USE ONLY
 
         public GameObject LeftHandPos; //The object with the current location of the left controller
         public GameObject RightHandPos; //The object with the current location of the right controller
@@ -29,6 +29,9 @@ namespace Valve.VR
 
         public GameObject ViewTypeMenuPrefab; //The prefab for the menu object
         public GameObject ViewTypeNetworker; //The network object used for changing scenes
+
+        public GameObject[] MenuItems;
+        public GameObject MenuItemNetworker;
 
         private Vector3 speed = Vector3.zero;
 
@@ -55,27 +58,28 @@ namespace Valve.VR
          */
         private void CheckMenu()
         {
-            if(LeftChangeViewType.state && !isChanging)
+            if(LeftButton.state && !isChanging) //Left Hand Changes Viewtype
             {
                 isChanging = true;
                 for(int i = 0; i < ViewTypeCount; i ++)
                 {
-                    GameObject view = Instantiate(ViewTypeMenuPrefab, LeftHandPos.transform.position + LeftHandPos.transform.rotation * (new Vector3(i*0.2f - 0.2f, 0.1f, 0)), transform.rotation);
+                    Vector3 LeftHandRot = LeftHandPos.transform.rotation.eulerAngles;
+                    LeftHandRot.x = 0f;
+                    LeftHandRot.z = 0f;
+                    GameObject view = Instantiate(ViewTypeMenuPrefab, LeftHandPos.transform.position + Quaternion.Euler(LeftHandRot) * (new Vector3(i*0.2f - 0.2f, 0.1f, 0)), transform.rotation);
                     view.GetComponent<SteamVRViewTypeMenu>().ViewTypeID = i + 1;
                     view.GetComponent<SteamVRViewTypeMenu>().controller = this;
                     menuItems[i] = view;
                 }
             }
-            else if (RightChangeViewType.state && !isChanging)
+            else if (RightButton.state && !isChanging) //Right Hand opens other menu items
             {
+                Vector3 RightHandRot = RightHandPos.transform.rotation.eulerAngles;
+                RightHandRot.x = 0f;
+                RightHandRot.z = 0f;
                 isChanging = true;
-                for (int i = 0; i < ViewTypeCount; i++)
-                {
-                    GameObject view = Instantiate(ViewTypeMenuPrefab, RightHandPos.transform.position + RightHandPos.transform.rotation * (new Vector3(i * 0.2f - 0.2f, 0.1f, 0)), transform.rotation);
-                    view.GetComponent<SteamVRViewTypeMenu>().ViewTypeID = i + 1;
-                    view.GetComponent<SteamVRViewTypeMenu>().controller = this;
-                    menuItems[i] = view;
-                }
+                GameObject menu1 = Instantiate(MenuItems[0], RightHandPos.transform.position + Quaternion.Euler(RightHandRot) * (new Vector3( -0.2f, 0.1f, 0)), Quaternion.Euler(new Vector3(0, 0, 0)));
+                GameObject menu2 = Instantiate(MenuItems[2], RightHandPos.transform.position + Quaternion.Euler(RightHandRot) * (new Vector3(0.2f, 0.1f, 0)), Quaternion.Euler(new Vector3(0, 0, 0)));
             }
         }
 
