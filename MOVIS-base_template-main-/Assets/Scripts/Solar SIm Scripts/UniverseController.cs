@@ -14,6 +14,7 @@ public class UniverseController : MonoBehaviour
     public static int displayK = 30; //The rate at which line renderers step through the points list
 
     public static bool orbiting = true; //Used to determine if planets are orbiting or changing view type
+    public static bool changing = false; // True if currently changing viewtypes, false otherwise
     public static int changeSteps = 0; //Used while changing view types
     public static int changeState = 0; //0 = Slowing down (default), 1 = changing orbit, 2 = speeding up, 3/0 = return to orbiting
     public static int currentSpeed = 0; //Current orbitSpeedK when changing
@@ -92,6 +93,8 @@ public class UniverseController : MonoBehaviour
             else //Changing viewtypes
             {
                 hideTrails();
+                changing = true;
+
                 //Debug.Log(changeState + " " + changeSteps + " " + orbitSpeedK);
                 if (changeState == 0) //Slowing down
                 {
@@ -146,6 +149,7 @@ public class UniverseController : MonoBehaviour
             changeSteps = 0;
             changeState = 0;
             orbiting = true;
+            changing = false;
         }
         changeSteps++;
     }
@@ -154,7 +158,10 @@ public class UniverseController : MonoBehaviour
     {
         foreach (PlanetController pc in Planets)
         {
-            pc.updateLocation();
+            if (pc.ID != 0 || changing) // The sun shouldn't orbit (change later so this is true for view 3 only)
+            {
+                pc.updateLocation();
+            }
         }
         updateVirtualControllers();
     }
