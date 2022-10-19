@@ -67,6 +67,7 @@ public class PlanetController : MonoBehaviour
     public void changeViewType(int ViewType)
     {
         PlanetData pd = GetComponentInParent<PlanetData>();
+
         float[][] changeMatrix = new float[2][];
         for (int i = 0; i < changeMatrix.Length; i++) //Sets up the changematrices
         {
