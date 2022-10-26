@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class UniverseController : MonoBehaviour
 {
+    public Transform earth;
+
     public static float bigG = 6.67428f * Mathf.Pow(10, -11); //G used for gravitation force calculating
     public static float planetScale = 1; //The scale planets are displayed
     public static float orbitScale = 1; //The scale of all orbits - can be used to scale the entire system at once rather than each individually
@@ -26,6 +28,7 @@ public class UniverseController : MonoBehaviour
 
     private PlanetController[] Planets; //List of planets to reference
     private VirtualController[] Bodies; //List of the virtual controlles in the planets to reference on build
+    public RotateScript moon;
 
     public static float SigmoidK = 14;
     public static float SigmoidOffset;
@@ -89,11 +92,16 @@ public class UniverseController : MonoBehaviour
                 updateTrails();
                 move();
                 currentSpeed = orbitSpeedK;
+                //Planets[4].startMoving(earth);
+                moon.changing = false;
             }
             else //Changing viewtypes
             {
                 hideTrails();
                 changing = true;
+                moon.changing = true;
+
+                //Planets[4].stopMoving(earth);
 
                 //Debug.Log(changeState + " " + changeSteps + " " + orbitSpeedK);
                 if (changeState == 0) //Slowing down
@@ -158,11 +166,13 @@ public class UniverseController : MonoBehaviour
     {
         foreach (PlanetController pc in Planets)
         {
-            if (pc.ID != 0 || changing) // The sun shouldn't orbit (change later so this is true for view 3 only)
+            if (pc.ID != 0 || changing)   // The sun shouldn't orbit (change later so this is true for view 3 only)
+                                                        // Moon should also not orbit from script in this branch
             {
                 pc.updateLocation();
             }
         }
+
         updateVirtualControllers();
     }
 

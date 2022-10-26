@@ -10,6 +10,8 @@ public class ViewTypeObserver : MonoBehaviour
     public int currentViewType = 0; //The current viewtype that the scene is displaying
     public PlanetController earth;
     public Light atmosphereLight;
+    public RotateScript moon;
+    public MeshScaler scaler;
 
     /*
      * Changes the viewtype of all devices.
@@ -39,6 +41,9 @@ public class ViewTypeObserver : MonoBehaviour
         {
             pc.changeViewType(scene);
         }
+
+        moon.view = scene;
+        scaler.view = scene;
     }
 
     // Update Method

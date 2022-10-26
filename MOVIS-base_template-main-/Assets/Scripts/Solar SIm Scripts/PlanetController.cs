@@ -19,6 +19,14 @@ public class PlanetController : MonoBehaviour
     public Vector3 Velocity { get; set; }
     public VirtualController controller { get; set; }
     public float[][] ViewTypeChangeMatrix { get; set; }
+
+    /*
+    public float radius = 2.0f;
+    public float radiusSpeed = 0.5f;
+    public float rotSpeed = 80.0f;
+    */
+
+    private bool moving = true;
     /*
      * MathPos should be used for any velocity, position, or acceleration calculations and is not affected by scale
      * Rigidbody's position values should change due to scale and are not used in any calulations. 
@@ -31,6 +39,11 @@ public class PlanetController : MonoBehaviour
         transform.localPosition = InitialPosition;
         MathPosition = transform.localPosition * privateOrbitScale;
         transform.eulerAngles = new Vector3(0, 0, tiltAngle);
+
+        if (ID == 4)
+        {
+            this.gameObject.SetActive(false);
+        }
     }
 
     public void updateLocation()
@@ -55,7 +68,7 @@ public class PlanetController : MonoBehaviour
     {
         if (ID == 3)
         {
-            Debug.Log("Diameter: " + diameter);
+            //Debug.Log("Diameter: " + diameter);
             mesh.transform.localScale = Vector3.one * diameter * UniverseController.planetScale * 0.5f;
         }
         else
@@ -87,7 +100,7 @@ public class PlanetController : MonoBehaviour
     {
         if (ID == 3)
         {
-            Debug.Log("Diameter: " + diameter);
+            //Debug.Log("Diameter: " + diameter);
             mesh.transform.localScale = Vector3.one * diameter * UniverseController.planetScale * 0.5f;
         }
         else
@@ -97,4 +110,28 @@ public class PlanetController : MonoBehaviour
         if (!isPined)
             transform.localPosition = (MathPosition * UniverseController.orbitScale * privateOrbitScale);
     }
+
+    /*
+    public void stopMoving(Transform goAround)
+    {
+        moving = false;
+        transform.RotateAround(goAround.transform.position, transform.up, 0.0f);
+    }
+
+    public void startMoving(Transform target)
+    {
+        if (ID == 4)
+        {
+            moving = true;
+            
+            //transform.RotateAround(center.position, Vector3.up, rotSpeed * Time.deltaTime);
+            //var desiredPosition = (transform.position - center.position).normalized * radius + center.position;
+            //transform.position = Vector3.MoveTowards(transform.position, desiredPosition, Time.deltaTime * radiusSpeed);
+            
+
+            transform.RotateAround(target.position, Vector3.up, 80f * Time.deltaTime);
+        }
+    }
+    */
 }
+
