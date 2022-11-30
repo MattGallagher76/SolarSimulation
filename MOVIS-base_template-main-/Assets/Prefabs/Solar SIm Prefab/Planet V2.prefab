@@ -1417,7 +1417,7 @@ PrefabInstance:
     - target: {fileID: 4881444454698297491, guid: ceb9640a73b8eb840a51907d865aeac4, type: 3}
       propertyPath: mesh
       value: 
-      objectReference: {fileID: 7000512438550154844}
+      objectReference: {fileID: 0}
     - target: {fileID: 4881444454698297491, guid: ceb9640a73b8eb840a51907d865aeac4, type: 3}
       propertyPath: diameter
       value: 1
